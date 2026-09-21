@@ -1,0 +1,748 @@
+/* ============================================================
+   BRAND COLORS - sampled directly from the Capitec logo file
+   (frontend/src/assets/capitec-logo.png), not guessed.
+   ============================================================ */
+:root {
+  --capitec-navy: #01466f;
+  --capitec-red: #e73a34;
+  --capitec-navy-dark: #012f4a;
+  --capitec-red-dark: #b32b26;
+
+  --bg-page: #f4f5f6;      /* soft grayish blend, not stark white */
+  --bg-panel: #ffffff;
+  --border: #dfe3e6;
+  --border-strong: #c7ccd1;
+
+  --text-primary: #1a1a19;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   APP SHELL - sidebar nav + main content, replaces the old single
+   long-scrolling page. See Sidebar.jsx / Layout.jsx.
+   ============================================================ */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--capitec-navy-dark);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
+.sidebar-brand {
+  margin: 0 16px 20px;
+  padding: 12px 16px;
+  /* the source logo has an opaque white background (not transparent),
+     so a white card behind it reads cleanly on the dark sidebar
+     instead of fighting the logo's own colors or leaving an inverted
+     black box */
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-brand img {
+  height: 24px;
+  display: block;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-left-color: var(--capitec-red);
+}
+
+.sidebar-icon {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar-logout {
+  margin: 12px 20px 0;
+  background: transparent;
+  border: 0.5px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  max-width: 1200px;
+}
+
+.page-content {
+  margin-top: 4px;
+}
+
+.page-title {
+  /* LABEL: structural heading - caps, matches panel-title treatment */
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--capitec-navy);
+  margin: 0;
+}
+
+.page-subtitle {
+  /* Ordinary sentence, not a label - stays sentence case */
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 2px 0 20px;
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-page);
+}
+
+.login-card {
+  width: 320px;
+  background: var(--bg-panel);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+}
+
+.login-logo {
+  height: 32px;
+  margin: 0 auto 4px;
+}
+
+.login-title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--capitec-navy);
+  margin: 0;
+}
+
+.login-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.login-field input {
+  height: 36px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 13px;
+  text-transform: none;
+  color: var(--text-primary);
+}
+
+.login-error {
+  font-size: 12px;
+  color: var(--capitec-red-dark);
+  margin: 0;
+}
+
+.login-submit {
+  margin-top: 4px;
+}
+
+/* ============================================================
+   FILTER / TOOLBAR ROW
+   ============================================================ */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-bar select,
+.filter-bar input,
+.date-range-select,
+button {
+  height: 36px;
+  border: 0.5px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--bg-panel);
+  padding: 0 10px;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* LABEL: dropdown option text (stages, statuses, date range) - caps */
+.filter-bar select,
+.date-range-select {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+}
+
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+button.primary {
+  background: var(--capitec-red);
+  border-color: var(--capitec-red);
+  color: #fff;
+}
+
+button:hover {
+  background: #f1f0ec;
+}
+
+button.primary:hover {
+  background: var(--capitec-red-dark);
+}
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: var(--bg-panel);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.metric-label {
+  /* LABEL: caps */
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.metric-value {
+  /* DATA: the actual number - not a label, stays as-is */
+  font-size: 26px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--capitec-navy);
+}
+
+/* ============================================================
+   PANELS (charts, lists)
+   ============================================================ */
+.grid-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  /* flex column so .panel-body (below) can flex:1 and fill whatever
+     height CSS Grid's default row-stretch gives this panel - see
+     Panel.jsx for why that matters. */
+  display: flex;
+  flex-direction: column;
+}
+
+/* The chart/content area below a panel's header. flex:1 lets it grow
+   to fill the panel's actual height instead of sitting at a fixed
+   pixel size with dead space below it when a sibling panel in the
+   same grid row is taller (e.g. the lifecycle donut + its legend
+   chips). min-height is a floor for when this panel isn't stretched
+   by anything (alone in its row, or the tallest one there). */
+.panel-body {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The chart itself, inside .panel-body - flex:1 so it's the part that
+   actually grows to fill extra height (a legend row or explainer text
+   alongside it keeps its own natural size instead of being stretched).
+
+   position:relative + the rule below is a deliberate belt-and-braces
+   fix for a known Recharts quirk: ResponsiveContainer's own 100%/100%
+   sizing can fail to resolve correctly when it sits several layers
+   deep inside nested flex/grid containers (it measures 0 even though
+   the space is genuinely there), leaving the chart blank while
+   everything else in the panel renders fine. Anchoring it with
+   absolute positioning against this now-positioned parent sidesteps
+   that percentage-resolution path entirely. */
+.panel-chart {
+  flex: 1;
+  min-height: 160px;
+  position: relative;
+}
+
+.panel-chart .recharts-responsive-container {
+  position: absolute;
+  inset: 0;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Panels that use <details>/<summary> for a native, code-free collapse
+   (accounts list, top accounts, watchlist, churned accounts) - the
+   summary IS the panel-header.
+   display:flex on a <summary> suppresses the browser's own disclosure
+   triangle in most browsers, which left these panels with no visual
+   sign they were clickable at all - list-style:none removes what's left
+   of the native marker consistently, and the ::before chevron below
+   replaces it with one that's actually visible. */
+summary.panel-header {
+  cursor: pointer;
+  margin-bottom: 0;
+  list-style: none;
+  /* adding the chevron as a 3rd flex child breaks plain
+     justify-content:space-between (it would float the title away from
+     the chevron toward the middle) - cluster chevron+title with gap,
+     push the subtitle to the far right explicitly instead. */
+  justify-content: flex-start;
+}
+
+summary.panel-header .panel-subtitle {
+  margin-left: auto;
+}
+
+summary.panel-header::-webkit-details-marker {
+  display: none;
+}
+
+summary.panel-header::before {
+  content: '\25B8'; /* ▸ closed */
+  display: inline-block;
+  width: 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+details.panel[open] > summary.panel-header::before {
+  content: '\25BE'; /* ▾ open */
+}
+
+details.panel[open] summary.panel-header {
+  margin-bottom: 10px;
+}
+
+.accounts-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.accounts-toolbar-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.accounts-toolbar-label select {
+  height: 30px;
+  text-transform: none;
+}
+
+.pagination-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.pagination-page {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.panel-title {
+  /* LABEL: panel titles - caps, per feedback */
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.panel-empty {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 24px 0;
+  text-align: center;
+}
+
+/* ============================================================
+   LEGEND (donut/bar chart legends)
+   ============================================================ */
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: none;
+  border: 0.5px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+/* LABEL: the stage name inside the legend chip - caps */
+.legend-item-name {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.legend-item.selected {
+  border-color: var(--capitec-red);
+  background: #fdecea;
+}
+
+.legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* ============================================================
+   DENSE LISTS (top accounts, watchlist, activity summary)
+   ============================================================ */
+.dense-list {
+  border: 0.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dense-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.dense-row:last-child {
+  border-bottom: none;
+}
+
+/* DATA: business names, descriptions - normal sentence case, unchanged */
+.dense-row-main {
+  color: var(--text-primary);
+}
+
+/* LABEL: tags like lifecycle stage / status shown next to a row - caps */
+.dense-row-tag {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dense-row-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ============================================================
+   ACTIVITY SUMMARY (grouped counts, not a live ticker)
+   ============================================================ */
+.activity-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.activity-stat {
+  background: var(--bg-page);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.activity-stat-label {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin: 0 0 2px;
+}
+
+.activity-stat-value {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--capitec-navy);
+  margin: 0;
+}
+
+/* ============================================================
+   FUNNEL (customer journey: onboarded -> activated -> insurance -> loans)
+   ============================================================ */
+.funnel-explainer {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0 0 12px;
+}
+
+.funnel-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.funnel-stage-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.funnel-stage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.funnel-stage-label {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 11px;
+  color: var(--text-secondary);
+  width: 100px;
+  flex-shrink: 0;
+}
+
+/* LABEL: drop-off/churn note under a stage - a caveat about the bar
+   above it, not the account's own data, so it gets the same caps
+   treatment as other structural annotations */
+.funnel-dropoff {
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-size: 10px;
+  color: var(--capitec-red-dark);
+  margin: 0 0 0 110px;
+}
+
+.funnel-bar-track {
+  flex: 1;
+  background: var(--bg-page);
+  border-radius: 4px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.funnel-bar-fill {
+  height: 100%;
+  background: var(--capitec-navy);
+  border-radius: 4px;
+}
+
+.funnel-stage-value {
+  font-size: 12px;
+  color: var(--text-primary);
+  width: 70px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   RESPONSIVE - the sidebar was a fixed 220px with no breakpoints at
+   all, so on anything narrower than a laptop screen it squeezed the
+   whole layout instead of adapting. Two stops: below ~900px the
+   sidebar becomes an icon-only rail (labels hidden, title attribute
+   on each link covers the tooltip); below ~640px every multi-column
+   grid drops to one column and the toolbar stacks instead of
+   squeezing. Recharts' own ResponsiveContainer already resizes each
+   chart's SVG to fill its panel, so panels just need room to reflow -
+   these breakpoints are what give them that room.
+   ============================================================ */
+@media (max-width: 900px) {
+  .sidebar {
+    width: 64px;
+  }
+
+  .sidebar-brand {
+    margin: 0 8px 20px;
+    padding: 8px;
+  }
+
+  .sidebar-link {
+    justify-content: center;
+    padding: 12px 0;
+  }
+
+  .sidebar-label {
+    display: none;
+  }
+
+  .sidebar-logout {
+    margin: 12px 8px 0;
+    font-size: 0;
+    padding: 10px 0;
+  }
+
+  .sidebar-logout::before {
+    content: "⏻";
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .grid-row,
+  .kpi-row {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+  }
+
+  .filter-bar select,
+  .filter-bar input,
+  .date-range-select {
+    width: 100%;
+  }
+
+  .accounts-toolbar {
+    flex-wrap: wrap;
+  }
+}
+

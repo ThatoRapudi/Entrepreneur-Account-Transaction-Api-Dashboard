@@ -1,0 +1,80 @@
+# Runs the whole stack locally without installing Postgres on the
+# host at all - the exact thing that was causing install problems.
+# Postgres runs inside its own container, isolated from the host.
+#
+#   docker compose up --build
+#
+# No .env needed - every variable below has a working demo default
+# (same ones config.py falls back to without Docker). Override any of
+# them with a real .env (see .env.example) for an actual deployment -
+# never commit that one.
+#
+# Dashboard: http://localhost:5173   API: http://localhost:8000/docs
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-entrepreneur_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-entrepreneur_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # Exposed to the host too, in case you want to connect a GUI
+      # client (e.g. psql, TablePlus) directly for inspection.
+      - "5432:5432"
+    healthcheck:
+      # pg_isready with -U but no -d defaults to checking a database
+      # with the SAME NAME as the user - "entrepreneur_app" here, which
+      # never existed (the real database is POSTGRES_DB,
+      # "entrepreneur_db") - so this looped FATAL "database does not
+      # exist" forever without -d, even though Postgres itself and the
+      # actual app database were both fine the whole time.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-entrepreneur_app} -d ${POSTGRES_DB:-entrepreneur_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Service name "db" is how containers on this compose network
+      # reach the postgres container - not localhost, that would mean
+      # "inside this container" instead.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-entrepreneur_app}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-entrepreneur_db}
+      DATABASE_NAME: ${POSTGRES_DB:-entrepreneur_db}
+      SECRET_KEY: ${SECRET_KEY:-sCsAeYoxbqP7Wu2Lk_gh5K_GT6_a6Nach8e8LX4gztKOnn-YmiDOldI6yidwfJ4m}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Demo-Review-2026}
+      DEBUG: ${DEBUG:-False}
+      FRONTEND_URL: ${FRONTEND_URL:-}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Build-time only (see frontend/Dockerfile) - the browser talks
+        # to the backend directly at this URL, so it needs to be one
+        # the browser (not the frontend container) can actually reach.
+        # localhost:8000 works because the backend's port is published
+        # to the host above; swap for a real domain once deployed.
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:80"
+
+volumes:
+  postgres_data:

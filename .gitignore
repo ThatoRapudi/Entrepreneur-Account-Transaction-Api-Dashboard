@@ -1,0 +1,29 @@
+# Secrets - never commit the real .env, only .env.example. This app
+# doesn't actually need a .env to run at all - config.py and
+# docker-compose.yml both fall back to working demo defaults when one
+# isn't present, which is what makes this safe to enforce strictly.
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Database - mock/seeded data, regenerable via seed_database.py;
+# also far too large and binary for git to track sensibly
+*.db
+*.sqlite3
+
+# Node / frontend build output
+frontend/node_modules/
+frontend/dist/
+
+# Editor/OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
