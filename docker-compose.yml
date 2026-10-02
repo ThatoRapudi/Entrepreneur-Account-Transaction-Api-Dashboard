@@ -49,7 +49,11 @@ services:
       # Service name "db" is how containers on this compose network
       # reach the postgres container - not localhost, that would mean
       # "inside this container" instead.
-      DATABASE_URL: postgresql://${POSTGRES_USER:-entrepreneur_app}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-entrepreneur_db}
+      # "+psycopg2" is explicit on purpose - without it, SQLAlchemy's
+      # default Postgres driver choice can vary by environment/cache
+      # state, which is what caused a "No module named 'psycopg'"
+      # crash loop here before.
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-entrepreneur_app}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-entrepreneur_db}
       DATABASE_NAME: ${POSTGRES_DB:-entrepreneur_db}
       SECRET_KEY: ${SECRET_KEY:-sCsAeYoxbqP7Wu2Lk_gh5K_GT6_a6Nach8e8LX4gztKOnn-YmiDOldI6yidwfJ4m}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
